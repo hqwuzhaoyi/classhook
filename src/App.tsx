@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { atom, useAtom } from "jotai";
+import { Counter, AtomState } from "./Atom";
+
+
+const listAtom = atom<AtomState[]>([]);
+
+const createAtom = atom(null, (get, set, update) => {
+  set(listAtom, get(listAtom).concat(new AtomState(listAtom)));
+});
 
 function App() {
+  const [list] = useAtom(listAtom);
+  const [, create] = useAtom(createAtom);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {list.map((atom) => (
+        <Counter atom={atom} />
+      ))}
+
+      <button onClick={create}>create</button>
     </div>
   );
 }
