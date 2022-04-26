@@ -1,25 +1,25 @@
-import { atom, useAtom } from "jotai";
-import { Counter, AtomState } from "./Atom";
+import { DesignerEngineContext } from "./context";
+import Engine from "./Engine";
+import { List } from "./List";
+import { Setting } from "./Setting";
 
+const engine = new Engine();
 
-const listAtom = atom<AtomState[]>([]);
-
-const createAtom = atom(null, (get, set, update) => {
-  set(listAtom, get(listAtom).concat(new AtomState(listAtom)));
-});
-
-function App() {
-  const [list] = useAtom(listAtom);
-  const [, create] = useAtom(createAtom);
-
+const Content = () => {
   return (
     <div>
-      {list.map((atom) => (
-        <Counter atom={atom} />
-      ))}
-
-      <button onClick={create}>create</button>
+      <Setting></Setting>
+      <List></List>
     </div>
+  );
+};
+
+function App() {
+  return (
+    <DesignerEngineContext.Provider value={engine}>
+      <Content></Content>
+      111
+    </DesignerEngineContext.Provider>
   );
 }
 
